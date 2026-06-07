@@ -1,3 +1,5 @@
+Download Kokoro_espeak_Q4.gguf amd put it inside mahiru/KokoroTTS
+
 Copyright (c) 2026 Aakash (KairoqX)
 
 All Rights Reserved.
