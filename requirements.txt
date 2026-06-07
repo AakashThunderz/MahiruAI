@@ -1,0 +1,10 @@
+groq
+cerebras-cloud-sdk
+speechrecognition
+pyaudio
+pillow
+edge-tts
+pygame
+kokoro
+soundfile
+sounddevice
