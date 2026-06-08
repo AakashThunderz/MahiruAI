@@ -76,7 +76,7 @@ The project imports several desktop/runtime libraries. Install dependencies from
 1. Clone or download the repository.
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/AakashThunderz/ai_anime_assistant-mahiru-ai-.git
 cd ai_anime_assistant(mahiru-ai)
 ```
 
@@ -94,7 +94,7 @@ pip install -r requirements.txt
 ```
 
 4. Download `Kokoro_espeak_Q4.gguf` and place it inside:
-
+   Download Link: https://huggingface.co/mmwillet2/Kokoro_GGUF/tree/main
 ```text
 mahiru/KokoroTTS/
 ```
