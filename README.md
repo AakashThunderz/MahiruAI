@@ -185,7 +185,6 @@ Mute volume
 - Improve dependency packaging and document optional Live2D/Selenium dependencies clearly.
 - Add Windows `.exe` packaging support.
 - Move secrets to environment variables or a safer local configuration flow.
-- Add a cleaner open-source license file if the project is intended for public reuse.
 
 ## 🙏 Credits
 
