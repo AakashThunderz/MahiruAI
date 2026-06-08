@@ -199,4 +199,4 @@ Mute volume
 
 Copyright (c) 2026 Aakash (KairoqX).
 
-All rights reserved unless a separate license file is added to this repository.
+All rights reserved
