@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import subprocess
 import re
 from contextlib import contextmanager
 from urllib.parse import parse_qs, quote_plus, unquote, urlparse
@@ -47,28 +48,34 @@ def open_website(target: str) -> tuple[bool, str]:
     url = build_url(cleaned_target)
 
     try:
-        os.startfile(url)
-        return True, f"Opening {target} in your browser."
+        # Use Windows API ShellExecute (non-blocking)
+        win32api.ShellExecute(0, "open", url, "", "", win32con.SW_SHOW)
     except OSError as exc:
         return False, f"I could not open {target} in the browser: {exc}"
+
+    return True, f"Opening {target} in your browser."
 
 
 def open_top_search_result(query: str) -> tuple[bool, str]:
     lucky_url = f"https://www.google.com/search?q={quote_plus(query)}&btnI=I"
     try:
-        os.startfile(lucky_url)
-        return True, f"Opening the top search result for {query}."
+        # Use Windows API ShellExecute (non-blocking)
+        win32api.ShellExecute(0, "open", lucky_url, "", "", win32con.SW_SHOW)
     except OSError as exc:
         return False, f"I could not open the top search result for {query}: {exc}"
+
+    return True, f"Opening the top search result for {query}."
 
 
 def open_youtube_search(query: str) -> tuple[bool, str]:
     url = f"https://www.youtube.com/results?search_query={quote_plus(query)}"
     try:
-        os.startfile(url)
-        return True, f"Opening YouTube results for {query}."
+        # Use Windows API ShellExecute (non-blocking)
+        win32api.ShellExecute(0, "open", url, "", "", win32con.SW_SHOW)
     except OSError as exc:
         return False, f"I could not open YouTube for {query}: {exc}"
+
+    return True, f"Opening YouTube results for {query}."
 
 
 def open_top_youtube_result(query: str) -> tuple[bool, str]:
@@ -79,8 +86,8 @@ def open_top_youtube_result(query: str) -> tuple[bool, str]:
         if success:
             return success, message
         try:
-            os.startfile(autoplay_url)
-            return True, f"Opening the top YouTube result for {query}."
+            # Use Windows API ShellExecute (non-blocking)
+            win32api.ShellExecute(0, "open", autoplay_url, "", "", win32con.SW_SHOW)
         except OSError:
             pass
     return open_youtube_search(query)
@@ -90,10 +97,12 @@ def open_spotify_search(query: str) -> tuple[bool, str]:
     browser_url = f"https://open.spotify.com/search/{quote_plus(query)}"
 
     try:
-        os.startfile(browser_url)
-        return True, f"Opening Spotify web player for {query}."
+        # Use Windows API ShellExecute (non-blocking)
+        win32api.ShellExecute(0, "open", browser_url, "", "", win32con.SW_SHOW)
     except OSError as exc:
         return False, f"I could not open Spotify for {query}: {exc}"
+
+    return True, f"Opening Spotify web player for {query}."
 
 
 def open_top_spotify_result(query: str) -> tuple[bool, str]:
@@ -107,8 +116,8 @@ def open_top_spotify_result(query: str) -> tuple[bool, str]:
         if success:
             return success, message
         try:
-            os.startfile(autoplay_url)
-            return True, f"Opening the top Spotify result for {query}."
+            # Use Windows API ShellExecute (non-blocking)
+            win32api.ShellExecute(0, "open", autoplay_url, "", "", win32con.SW_SHOW)
         except OSError:
             pass
     return open_spotify_search(query)
@@ -141,19 +150,23 @@ def open_site_search(domain: str, query: str, label: str) -> tuple[bool, str]:
         f"q={quote_plus(f'site:{domain} {query}')}&btnI=I"
     )
     try:
-        os.startfile(lucky_url)
-        return True, f"Opening the top {label} result for {query}."
+        # Use Windows API ShellExecute (non-blocking)
+        win32api.ShellExecute(0, "open", lucky_url, "", "", win32con.SW_SHOW)
     except OSError as exc:
         return False, f"I could not open {label} for {query}: {exc}"
+
+    return True, f"Opening the top {label} result for {query}."
 
 
 def open_direct_platform_search(url_template: str, query: str, label: str) -> tuple[bool, str]:
     url = url_template.format(query=quote_plus(query))
     try:
-        os.startfile(url)
-        return True, f"Opening {label} for {query}."
+        # Use Windows API ShellExecute (non-blocking)
+        win32api.ShellExecute(0, "open", url, "", "", win32con.SW_SHOW)
     except OSError as exc:
         return False, f"I could not open {label} for {query}: {exc}"
+
+    return True, f"Opening {label} for {query}."
 
 
 def find_first_search_result_url(query: str, preferred_domains: tuple[str, ...]) -> str | None:

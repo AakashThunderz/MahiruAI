@@ -20,12 +20,18 @@ class ActionResult:
 
 
 def handle_action_request(command: str) -> ActionResult:
+    print(f"DEBUG pc_control: Handling action request for: {command}")
     request = classify_user_request(command)
     if request is None:
+        print(f"DEBUG pc_control: No action request classified")
         return ActionResult(handled=False, success=False)
 
+    print(f"DEBUG pc_control: Action request classified: kind={request.kind}, target={request.target}")
+
     if request.kind == "app":
+        print(f"DEBUG pc_control: Opening app: {request.target}")
         success, message = open_app(request.target)
+        print(f"DEBUG pc_control: open_app returned: success={success}, message={message}")
         return ActionResult(handled=True, success=success, message=message)
 
     if request.kind == "app_control":

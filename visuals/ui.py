@@ -89,7 +89,7 @@ class MahiruDesktopApp:
         tk.Label(panel, text='LIVE2D SHELL // TEMP MODEL', fg='#F3F7FF', bg='#1A2233', font=('Consolas', 16, 'bold')).grid(row=0, column=0, sticky='w', padx=18, pady=(18, 8))
         tk.Label(
             panel,
-            text='Hiyori sample model detected. Mahiru now uses Cerebras as primary online AI with Groq fallback.',
+            text='Hiyori sample model detected. Mahiru now uses online AI Groq.',
             fg='#B8C4D9',
             bg='#1A2233',
             wraplength=420,
@@ -223,11 +223,17 @@ class MahiruDesktopApp:
         threading.Thread(target=self.process_message_worker, args=(text,), daemon=True).start()
 
     def process_message_worker(self, text: str):
-        with self.worker_lock:
+        try:
             should_continue, reply = process_user_message(text)
             self.ui_queue.put(('assistant_response', (should_continue, reply, get_runtime_status())))
+        except Exception as exc:
+            print(f"ERROR in process_message_worker: {exc}")
+            import traceback
+            traceback.print_exc()
+            self.ui_queue.put(('error', f'Message processing error: {exc}'))
 
     def process_ui_queue(self):
+        # Process all events in the queue at once
         while True:
             try:
                 event_name, payload = self.ui_queue.get_nowait()
@@ -260,8 +266,9 @@ class MahiruDesktopApp:
                 self.add_chat_line('SYSTEM', str(payload), 'error')
                 self.apply_avatar_state(build_avatar_state('error', mood='concerned', expression='concerned', status_text=str(payload), is_mic_enabled=self.mic_enabled, is_renderer_ready=self.renderer_ready))
 
-        if self.running:
-            self.root.after(120, self.process_ui_queue)
+        # Only schedule next run if queue is not empty
+        if self.running and not self.ui_queue.empty():
+            self.root.after(100, self.process_ui_queue)
 
     def refresh_companion_state(self):
         if not self.running:
@@ -487,6 +494,10 @@ class MahiruDesktopApp:
             self.speaking_animation_job = None
 
     def add_chat_line(self, speaker: str, text: str, tag: str):
+        # Use after to schedule the UI update in the main thread
+        self.root.after(0, lambda: self._add_chat_line_immediate(speaker, text, tag))
+
+    def _add_chat_line_immediate(self, speaker: str, text: str, tag: str):
         self.chat_text.config(state='normal')
         self.chat_text.insert('end', f'[{speaker}] {text}\n\n', tag)
         self.chat_text.see('end')

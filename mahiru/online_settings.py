@@ -6,45 +6,33 @@ from pathlib import Path
 from threading import Lock
 
 from config import (
-    DEFAULT_CEREBRAS_MODEL,
     DEFAULT_GROQ_MODEL,
-    DEFAULT_ONLINE_PROVIDER,
 )
 
 
 SETTINGS_PATH = Path(__file__).resolve().parent.parent / ".cache" / "online_settings.json"
 
-MODEL_CATALOG: dict[str, list[str]] = {
-    "cerebras": [
-        "llama3.1-8b",
-        "gpt-oss-120b",
-        "qwen-3-235b-a22b-instruct-2507",
-        "zai-glm-4.7",
-    ],
+MODEL_CATALOG = {
     "groq": [
         "llama-3.3-70b-versatile",
         "llama-3.1-8b-instant",
         "openai/gpt-oss-120b",
         "openai/gpt-oss-20b",
-    ],
+    ]
 }
 
 PROVIDER_LABELS = {
-    "cerebras": "Cerebras",
-    "groq": "Groq",
+    "groq": "Groq"
 }
-
 
 @dataclass(slots=True)
 class OnlineSettings:
-    primary_provider: str = DEFAULT_ONLINE_PROVIDER
+    primary_provider: str = "groq"
     selected_models: dict[str, str] = field(
         default_factory=lambda: {
-            "cerebras": DEFAULT_CEREBRAS_MODEL,
             "groq": DEFAULT_GROQ_MODEL,
         }
     )
-
 
 class OnlineSettingsManager:
     def __init__(self, settings_path: Path = SETTINGS_PATH):
@@ -111,7 +99,7 @@ class OnlineSettingsManager:
 
     def get_fallback_provider(self) -> str:
         settings = self.get()
-        return "groq" if settings.primary_provider == "cerebras" else "cerebras"
+        return "groq"
 
 
 online_settings = OnlineSettingsManager()

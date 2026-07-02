@@ -43,6 +43,22 @@ async def mahiru_speak(text: str):
         cleanup_temp_audio_file(temp_audio)
 
 
+import asyncio
+import threading
+import os
+from pathlib import Path
+
+import edge_tts
+import pygame
+
+from config import PITCH, RATE, TEMP_AUDIO_FILE, VOICE_ID, VOLUME
+from .tts_settings import tts_settings
+
+
+pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=512)
+TEMP_AUDIO_PATH = Path(TEMP_AUDIO_FILE)
+
+
 def speak(text: str):
     """Speak a line of dialogue."""
     engine = tts_settings.get_engine()
@@ -52,7 +68,14 @@ def speak(text: str):
         synthesize_and_play(text)
         return
 
-    asyncio.run(mahiru_speak(text))
+    # Run TTS in a separate thread to avoid blocking the assistant loop
+    def run_speech():
+        try:
+            asyncio.run(mahiru_speak(text))
+        except Exception as exc:
+            print(f"Voice error: {exc}")
+
+    threading.Thread(target=run_speech, daemon=True).start()
 
 
 def cleanup_old_temp_files():

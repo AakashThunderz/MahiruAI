@@ -5,6 +5,7 @@ import hashlib
 import io
 import json
 import os
+import threading
 from pathlib import Path
 import sys
 import tempfile
@@ -118,12 +119,22 @@ def synthesize_and_play(text: str):
     if engine == "kokoro":
         if not wav_path.exists():
             generate_kokoro_voice_file(text, wav_path)
-        play_audio_with_pygame(wav_path)
+        # Run audio playback in separate thread
+        def play_thread():
+            play_audio_with_pygame(wav_path)
+        threading.Thread(target=play_thread, daemon=True).start()
         return
 
     if not mp3_path.exists():
-        asyncio.run(generate_edge_voice_file(text, mp3_path))
-    play_audio_with_pygame(mp3_path)
+        # Run TTS generation in separate thread
+        def tts_thread():
+            asyncio.run(generate_edge_voice_file(text, mp3_path))
+        threading.Thread(target=tts_thread, daemon=True).start()
+
+    # Run audio playback in separate thread
+    def play_thread():
+        play_audio_with_pygame(mp3_path)
+    threading.Thread(target=play_thread, daemon=True).start()
 
 
 def get_kokoro_pipeline():

@@ -15,11 +15,13 @@ def open_file_or_folder(target: str) -> tuple[bool, str]:
         return False, f"I could not find a file or folder matching {target}."
 
     try:
-        os.startfile(str(match))
-        item_type = "folder" if match.is_dir() else "file"
-        return True, f"Opening that {item_type} for you."
+        # Use Windows API ShellExecute (non-blocking)
+        win32api.ShellExecute(0, "open", str(match), "", "", win32con.SW_SHOW)
     except OSError as exc:
         return False, f"I found {match.name}, but I could not open it: {exc}"
+
+    item_type = "folder" if match.is_dir() else "file"
+    return True, f"Opening that {item_type} for you."
 
 
 def find_path_match(target: str) -> Path | None:

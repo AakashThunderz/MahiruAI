@@ -10,12 +10,10 @@ try:
     import winreg
     import win32api
     import win32con
-    import win32com.client
 except ImportError:
     winreg = None
     win32api = None
     win32con = None
-    win32com_client = None
 
 from .file_actions import normalize_name, score_match, tokenize_name
 
@@ -45,19 +43,48 @@ def open_app(target: str) -> tuple[bool, str]:
         return False, f"I could not find an installed app named {target}."
 
     try:
-        # Use Windows API ShellExecute (non-blocking)
-        win32api.ShellExecute(
-            0,  # hwnd
-            "open",  # operation
-            command,  # file
-            "",  # parameters
-            "",  # directory
-            win32con.SW_SHOW  # show window
-        )
+        # Try Windows API approach first (most reliable for non-blocking)
+        if win32api and win32con:
+            try:
+                # Use ShellExecute with SW_SHOW which launches and returns immediately
+                print(f"DEBUG app_actions: Using ShellExecute for {target}")
+                win32api.ShellExecute(
+                    0,  # hwnd
+                    "open",  # operation
+                    command,  # file
+                    "",  # parameters
+                    "",  # directory
+                    win32con.SW_SHOW  # show window
+                )
+                print(f"DEBUG app_actions: ShellExecute launched {target}")
+                return True, f"Opening {target} now."
+            except Exception as exc:
+                print(f"DEBUG app_actions: ShellExecute failed, falling back to subprocess: {exc}")
+        else:
+            print(f"DEBUG app_actions: win32api not available, using subprocess")
+
+        # Fallback to subprocess with proper non-blocking flags
+        creation_flags = subprocess.CREATE_NEW_PROCESS_GROUP | subprocess.DETACHED_PROCESS
+
+        if command.endswith(":"):
+            # Launch Windows folder - non-blocking
+            print(f"DEBUG app_actions: Launching folder: {command}")
+            subprocess.Popen(command, shell=True, creationflags=creation_flags)
+        elif looks_like_launchable_path(command):
+            # Launch file - non-blocking
+            print(f"DEBUG app_actions: Launching file: {command}")
+            subprocess.Popen(command, shell=True, creationflags=creation_flags)
+        else:
+            # Launch executable - non-blocking
+            print(f"DEBUG app_actions: Launching app: {command}")
+            subprocess.Popen(command, shell=True, creationflags=creation_flags)
+        print(f"DEBUG app_actions: Successfully launched {target}")
         return True, f"Opening {target} now."
     except FileNotFoundError:
+        print(f"DEBUG app_actions: FileNotFoundError for {target}: {command}")
         return False, f"I found a match for {target}, but it does not seem launchable right now."
     except OSError as exc:
+        print(f"DEBUG app_actions: OSError launching {target}: {exc}")
         return False, f"I could not open {target}: {exc}"
 
 
@@ -90,6 +117,8 @@ def find_best_app_match(target: str) -> str | None:
         score = score_app_match(app_name, normalized_target, target_tokens)
         if score > best_score:
             best_score = score
+            best_command = command
+        elif score == best_score and score > 0:
             best_command = command
 
     return best_command if best_score >= 70 else None

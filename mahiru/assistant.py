@@ -32,23 +32,25 @@ def process_user_message(command: str) -> tuple[bool, MahiruReply]:
 
     handled_locally, local_message = companion.handle_local_request(command)
     if handled_locally:
-        return True, build_plain_reply(
+        reply = build_plain_reply(
             local_message or "I'm keeping that in mind for you.",
             expression='caring',
             mood='caring',
             motion='happy_bounce',
             status_text='Companion support',
         )
+        return True, reply
 
     action_result = handle_action_request(command)
     if action_result.handled:
-        return True, build_plain_reply(
+        reply = build_plain_reply(
             action_result.message or 'I handled that for you.',
             expression='caring',
             mood='caring',
             motion='happy_bounce',
             status_text='Handled for you',
         )
+        return True, reply
 
     if lowered in EXIT_PHRASES:
         return False, build_plain_reply(

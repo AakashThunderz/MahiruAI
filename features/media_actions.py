@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import subprocess
 from pathlib import Path
 
 from .file_actions import normalize_name, score_match, tokenize_name
@@ -196,10 +197,12 @@ def looks_like_sand_noise(path: Path) -> bool:
 
 def open_local_media(path: Path) -> tuple[bool, str]:
     try:
-        os.startfile(str(path))
-        return True, f"Playing {path.stem} from your PC."
+        # Use Windows API ShellExecute (non-blocking)
+        win32api.ShellExecute(0, "open", str(path), "", "", win32con.SW_SHOW)
     except OSError as exc:
         return False, f"I found {path.name}, but I could not play it: {exc}"
+
+    return True, f"Playing {path.stem} from your PC."
 
 
 def iter_media_search_roots(media_type: str | None) -> list[Path]:

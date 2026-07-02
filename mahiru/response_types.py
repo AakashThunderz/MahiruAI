@@ -19,7 +19,7 @@ def build_plain_reply(text: str, *, expression: str = 'neutral', mood: str = 'ne
         mood=mood,
         motion=motion,
         status_text=status_text,
-        model="openai/gpt-oss-20b"                 
+        model="openai/gpt-oss-20b",                 
 
  userinput = input("Prompt: ")
     )
