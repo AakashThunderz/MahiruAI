@@ -198,19 +198,23 @@ graph TD
 
 ### 📋 Prerequisites
 
-- Windows 10/11
-- Python 3.11+
-- Microphone (for voice input)
-- Brave Browser (for web automation)
-- Internet connection (for Groq and Edge TTS)
+- Windows 10 or Windows 11
+- Python 3.11 or newer recommended
+- Microphone for voice input
+- Brave Browser for browser automation features
+- Internet connection for Cerebras, Groq, Edge TTS, and Google speech recognition
+- Local Kokoro model file for offline Kokoro TTS
 
-### 🔧 Setup Steps
+The project imports several desktop/runtime libraries. Install dependencies from `requirements.txt` first. If optional modules such as Live2D, OpenGL, or Selenium are missing in your environment, install the matching packages required by your local setup.
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/AakashThunderz/MahiruAI.git
-   cd MahiruAI
-   ```
+## 🚀 Installation Guide
+
+1. Clone or download the repository.
+
+```bash
+git clone <repository-url>
+cd ai_anime_assistant(mahiru-ai)
+```
 
 2. **Create virtual environment**
    ```bash
@@ -223,9 +227,11 @@ graph TD
    pip install -r requirements.txt
    ```
 
-4. **Download Kokoro model**
-   - Get `Kokoro_espeak_Q4.gguf` from [Kokoro TTS](https://huggingface.co/mmwillet2/Kokoro_GGUF/resolve/main/Kokoro_espeak_Q4.gguf?download=true)
-   - Place it in `mahiru/KokoroTTS/`
+4. Download `Kokoro_espeak_Q4.gguf` and place it inside:
+
+```text
+mahiru/KokoroTTS/
+```
 
 5. **Configure environment**
    - Copy `.env.example` to `.env`
@@ -292,209 +298,46 @@ Switch to study mode
 Take a screenshot
 Volume up
 Mute volume
-What's the weather today?
 ```
 
-### 💬 Conversation Examples
+## 🛠️ Troubleshooting
 
-```text
-User: Good morning Mahiru!
-Mahiru: *cheerful* Good morning! Did you sleep well? I made sure to
-        keep everything ready for your day!
+| Problem | What to Check |
+| --- | --- |
+| No assistant reply | Verify `CEREBRAS_API_KEY` and `GROQ_API_KEY` in `config.py`. |
+| Cerebras fails | Check the selected Cerebras model and API quota, then use Groq fallback from settings. |
+| Groq fails | Check the selected Groq model name and API key. |
+| No voice output | Test both Edge TTS and Kokoro TTS from settings. |
+| Kokoro is slow | Make sure `Kokoro_espeak_Q4.gguf` is inside `mahiru/KokoroTTS/` and the voice worker is running in service mode. |
+| Microphone does not work | Check microphone permissions, PyAudio installation, and internet access for Google speech recognition. |
+| Live2D model does not render | Check that Live2D, OpenGL, and `pyopengltk` are installed and that a valid `.model3.json` exists under `visuals/assets/models/`. |
+| Browser opens but does not autoplay | Make sure Brave is installed at the expected Windows path and that Selenium can control the browser. Some websites block autoplay. |
+| App command opens the wrong app | Delete the cached app index in `.cache/` and let the assistant rebuild it. |
+| Import or syntax error | Run Python from the project root and check recently edited source files, especially schema files such as `mahiru/response_types.py`. |
 
-User: I feel a bit tired today...
-Mahiru: *concerned* Oh no! Maybe you should take a short break?
-        Would you like me to play some relaxing music?
+## 🗺️ Roadmap
 
-User: Tell me a joke
-Mahiru: *playful* Why don't scientists trust atoms?
-        Because they make up everything! *giggles*
-```
-
----
-
-## 💻 Technologies
-
-| Category | Technology | Purpose |
-|----------|------------|---------|
-| **Language** | Python 3.11 | Core application |
-| **AI Backend** | Groq API | Intelligence engine |
-| **Voice (Online)** | Edge TTS | High-quality speech |
-| **Voice (Offline)** | Kokoro TTS | High=quality offline voice |
-| **Speech Recognition** | SpeechRecognition | Voice input |
-| **UI Framework** | Tkinter | Desktop interface |
-| **Avatar System** | Live2D Cubism | Character rendering |
-| **Browser Automation** | Selenium | Web interactions |
-| **System Control** | PyAutoGUI | Desktop automation |
-| **Audio Processing** | PyAudio | Audio handling |
-| **Configuration** | python-dotenv | Environment management |
-
----
-
-## 🗺️ Development Roadmap
-
-### 📅 Version Plan
-
-| Version | Focus | Key Features |
-|---------|-------|--------------|
-| **v0.1** | Core Foundation | Basic chat, voice I/O, simple automation |
-| **v0.2** | Personality Layer | Memory system, basic emotions, improved responses |
-| **v0.3** | Visual Enhancements | Better Live2D integration, expressions, lip sync |
-| **v0.4** | System Integration | Deep Windows control, app management, workflows |
-| **v0.5** | Plugin System | Extensible architecture, community contributions |
-| **v0.6** | Performance | Optimization, stability, bug fixes |
-| **v1.0** | Polished Experience | Complete feature set, documentation, installer |
-
-### 🎯 Current Focus (v0.1)
-
-- [x] Basic chat interface
-- [x] Groq API integration
-- [x] Voice input/output
-- [x] Simple system commands
-- [x] Live2D avatar display
-- [ ] Streaming responses
-- [ ] Basic expressions
-- [ ] Memory system
-- [ ] Plugin architecture
-
----
-
-## 🌌 Future Vision
-
-MahiruAI is just getting started. Future versions will include:
-
-🔮 **True Companion AI** - Not just responses, but real interaction
-👁️ **Visual Awareness** - Understanding what's on your screen
-🧠 **Advanced Memory** - Remembering your preferences and history
-🎭 **Dynamic Personality** - Moods that change based on interaction
-🎤 **Natural Voice** - Perfect intonation and emotion
-🖥️ **Deep Integration** - Understanding your workflow
-🌐 **Cross-Platform** - Beyond just Windows
-🤖 **Local AI Option** - For privacy-focused users
-🎨 **Customization** - Make Mahiru truly yours
-
-> "The goal isn't just to build an AI assistant - it's to create a companion that feels alive on your desktop."
-
----
-
-## 🤝 Contributing
-
-We welcome contributions from the community! Here's how you can help:
-
-### 🐞 Bug Reports
-
-Found a bug? [Open an issue](https://github.com/AakashThunderz/MahiruAI/issues) with:
-- Clear description
-- Steps to reproduce
-- Expected vs actual behavior
-- Screenshots if possible
-
-### 💡 Feature Requests
-
-Have an idea? [Submit a feature request](https://github.com/AakashThunderz/MahiruAI/issues) with:
-- Detailed description
-- Use cases
-- Mockups if applicable
-
-### 🛠️ Code Contributions
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/your-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin feature/your-feature`)
-5. Open a Pull Request(`https://github.com/AakashThunderz/MahiruAI/pulls`)
-
+- Add a complete offline LLM provider implementation in `mahiru/offline_providers.py`.
+- Add Ollama/local model routing while keeping only one model active at a time.
+- Improve Live2D expression mapping and model-level lip sync.
+- Harden browser autoplay for YouTube, Spotify, and other platforms.
+- Add automated tests for command routing, media search, and provider fallback.
+- Improve dependency packaging and document optional Live2D/Selenium dependencies clearly.
+- Add Windows `.exe` packaging support.
+- Move secrets to environment variables or a safer local configuration flow.
+- Add a cleaner open-source license file if the project is intended for public reuse.
 
 ## 🙏 Credits
 
-### 👤 Core Team
+- Project author: Aakash / KairoqX
+- Live2D Cubism ecosystem for avatar rendering support
+- Kokoro TTS for local voice generation
+- Edge TTS for online voice generation
+- Cerebras and Groq for online LLM inference
+- Python open-source libraries used throughout the project
 
-- **Aakash (KairoqX)** - Creator and Lead Developer
+## 📄 License
 
-### 🤝 Open Source Projects
+Copyright (c) 2026 Aakash (KairoqX).
 
-MahiruAI stands on the shoulders of these amazing projects:
-- [Groq](https://groq.com/) - Fast LLM inference
-- [Edge TTS](https://github.com/ranaroussi/edge-tts) - Speech synthesis
-- [Kokoro TTS](https://huggingface.co/onnx-community/Kokoro-82M-v1.0-ONNX) - Japanese voice
-- [Live2D Cubism](https://www.live2d.com/) - Avatar rendering
-- [SpeechRecognition](https://github.com/Uberi/speech_recognition) - Voice input
-- [Selenium](https://www.selenium.dev/) - Browser automation
-
-### 🎨 Asset Credits
-
-- Live2D models used with permission from their creators
-
----
-
-## 📜 License
-
-© 2026 Aakash (KairoqX). All Rights Reserved.
-
-> **Important:** This project is currently closed-source. The code is provided for personal use and study only. Redistribution, commercial use, or derivative works are not permitted without explicit permission.
-
-For inquiries about licensing or collaboration, please contact:
-📧 [kairoqxae1@gmail.com](mailto:kairoqxae1@gmail.com)
-
----
-
-## 📬 Contact
-
-Have questions or want to collaborate? Reach out:
-
-📧 Email: [kairoqxae1@gmail.com](mailto:kairoqxae1@gmail.com)
-💬 Discord: KairoqX
-✖️ X: [@KairoqX](https://x.com/@kairoqx)
-
-
----
-
-## ⚠️ Important Notes
-
-<details>
-<summary>🔍 Click to view important information</summary>
-
-### 🛑 Current Limitations
-
-- **Windows Only** - Currently optimized for Windows 10/11
-- **Experimental** - Expect bugs and missing features
-- **Resource Intensive** - Live2D and voice processing require decent hardware
-- **Internet Required** - For Groq API and Edge TTS (Kokoro works offline)
-
-### 🔒 Privacy Considerations
-
-- Voice input is processed locally (except Google speech recognition)
-- Chat history is stored locally only
-- No data is sent to any servers except:
-  - Groq API (for intelligence)
-  - Edge TTS (for speech synthesis)
-  - Google (for speech recognition if enabled)
-
-### 📥 Data Storage
-
-The application stores:
-- `.env` - Your configuration (never committed)
-- `.cache/` - Temporary files and indexes
-- `logs/` - Application logs
-- Local database - Conversation history and memory
-
-### 🛠️ Troubleshooting
-
-| Issue | Solution |
-|-------|----------|
-| No response from Mahiru | Check Groq API key and internet connection |
-| Voice not working | Verify microphone permissions and TTS settings |
-| Live2D not displaying | Ensure OpenGL drivers are up to date |
-| Commands not working | Check application paths in settings |
-| Slow performance | Try reducing Live2D model quality |
-
-</details>
-
----
-
-> **"MahiruAI is more than code - it's about bringing characters to life on your desktop."**
-
-[![Stargazers](https://img.shields.io/github/stars/AakashThunderz/MahiruAI?style=social)](https://github.com/AakashThunderz/MahiruAI/stargazers)
-[![Forks](https://img.shields.io/github/forks/AakashThunderz/MahiruAI?style=social)](https://github.com/AakashThunderz/MahiruAI/network/members)
-
-*Built with ❤️ for anime fans and AI enthusiasts worldwide*
+All rights reserved unless a separate license file is added to this repository.
