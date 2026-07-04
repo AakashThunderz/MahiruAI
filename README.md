@@ -46,15 +46,21 @@ This is just the beginning. We're building the foundation for something extraord
 ### 🗣️ Core Interaction
 
 ✅ **Natural Conversations** - Chat with Mahiru about anything
+
 ✅ **Groq API Integration** - Fast, intelligent responses using Groq's LLM
+
 ✅ **Voice Input/Output** - Talk to Mahiru and hear her responses
+
 ✅ **Personality System** - Mahiru has her own character
 
 ### 🎤 Voice System
 
 ✅ **Edge TTS Integration** - High-quality online voice synthesis
+
 ✅ **Kokoro TTS Support** - Offline voice option
+
 ✅ **Speech Recognition** - Hands-free voice control
+
 ✅ **Voice Settings** - Adjust pitch, speed, and volume
 
 ### 🖥️ System Integration
@@ -86,20 +92,31 @@ This is just the beginning. We're building the foundation for something extraord
 ### 📅 Short-Term Roadmap
 
 ⬜ **Streaming Responses** - Real-time LLM output
+
 ⬜ **Enhanced Expressions** - More avatar emotions
+
 ⬜ **Lip Sync** - Avatar mouth movements matching speech
+
 ⬜ **Improved Memory** - Better context retention
+
 ⬜ **Plugin System** - Easy feature expansion
+
 ⬜ **Mahiru's Live2d** - I have to use the actual Model of Mahiru
 
 ### 🌌 Long-Term Vision
 
 ⬜ **Vision System** - "See" what's on your screen
+
 ⬜ **Emotion Engine** - Dynamic personality responses
+
 ⬜ **Local AI Models** - Offline operation capability
+
 ⬜ **Custom Mahiru Model** - Train your own version
+
 ⬜ **Desktop Awareness** - Understand your work context
+
 ⬜ **Multi-Character** - Different companion personalities
+
 ⬜ **VR Integration** - Step into Mahiru's world
 
 ---
