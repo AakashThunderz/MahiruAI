@@ -60,16 +60,23 @@ This is just the beginning. We're building the foundation for something extraord
 ### 🖥️ System Integration
 
 ✅ **Application Control** - Open/close apps with voice commands
+
 ✅ **File System Access** - Find and open files/folders
+
 ✅ **Window Management** - Control windows with voice
+
 ✅ **Media Search** - Find and play music/videos
+
 ✅ **Web Automation** - Search and browse the web
+
 ✅ **System Actions** - Volume control, screenshots, and more
 
 ### 👗 Visual System
 
 ✅ **Live2D Avatar** - Live2D integration framework
+
 ✅ **Live2D Framework** - Basic emotional responses
+
 ✅ **Customizable Appearance** - Adjust avatar position and scale
 
 ---
